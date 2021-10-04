@@ -208,6 +208,35 @@ namespace KarlSaver
                     return;
             }
 
+            if(!File.Exists(win10Path))
+            {
+                try
+                {
+                    win10Path = FindWin10Path();
+                    win10PathText.Text = win10Path;
+                    File.WriteAllText("win10Path", win10Path);
+                }
+                catch
+                {
+                    MessageBox.Show("Error, specified file does not exist and cannot find correct path\n", "File Path Error" , MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+            }
+            if(!File.Exists(steamPath))
+            {
+                try
+                {
+                    steamPath = FindSteamPath();
+                    steamPathText.Text = steamPath;
+                    File.WriteAllText("steamPath", steamPath);
+                }
+                catch
+                {
+                    MessageBox.Show("Error, specified file does not exist and cannot find correct path\n", "File Path Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+            }
+
             try
             {
                 BackupFile(win10Path);
@@ -227,8 +256,6 @@ namespace KarlSaver
                 string[] splitSteam = steamPath.Split('\\');
                 splitSteam[splitSteam.Length - 1] = steamFile;
                 string newPath = String.Join("\\", splitSteam);
-                Console.WriteLine("xboxPath: " + win10Path);
-                Console.WriteLine("newSTEAMPath: " + newPath);
 
                 File.Copy(win10Path, newPath, true);
             }
@@ -298,11 +325,6 @@ namespace KarlSaver
 
         void PlaySound()
         {
-            /*SoundPlayer player = new SoundPlayer(@"C:\Users\Dylan\source\repos\KarlSaver\KarlSaver\bin\Debug\rock_and_stone.wav");
-            player.Load();
-            player.Play();
-            */
-
             MediaPlayer mediaplayer = new MediaPlayer();
             mediaplayer.Open(new Uri(@"C:\Users\Dylan\source\repos\KarlSaver\KarlSaver\bin\Debug\rock_and_stone.wav"));
             mediaplayer.Volume = 0.2;
